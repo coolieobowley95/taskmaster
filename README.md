@@ -1,37 +1,117 @@
-# TaskMaster - Productivity Task Management App
+#  👨‍💻 Author
 
-**Creater: Coolieo Bowley**
-gmail: coolieobowley95@gmail.com
+Coolieo Bowley
+Building AI-powered productivity tool
 
-**Welcome to TaskMaster project**
+# 🚀 TaskMaster - AI Productivity Task Management App
 
-**About**
+**Created by:** 
+Coolieo Bowley  
+📧 Email: coolieobowley95@gmail.com  
 
-TaskMaster is a modern, AI-powered task management application built with React and Vite. It allows users to create, organize, and track tasks and goals, with integrated AI assistance for productivity planning.
+---
 
-**Domain Url**
-https://coolieo-bowley-task-master.base44.app
+## 🌐 Live Links
 
-**Loacal Domain Url**
-http://localhost:5173
+- 🟣 **Base44 App (Production):**  
+  https://coolieo-bowley-task-master.base44.app  
 
-**Features**
+- 💻 **Local Development:**  
+  http://localhost:5173  
 
-- Create and manage tasks with priorities, categories, and due dates
-- Set and track goals with AI-generated task suggestions
-- Interactive dashboard with progress tracking and weekly charts
-- AI-powered chat assistant for productivity advice
-- Local storage fallback for offline development
-- Responsive design with Tailwind CSS
+- 🧑‍💻 **GitHub Repository:**  
+  https://github.com/coolieobowley95/taskmaster.git  
 
-**Edit the code in your local development environment**
+---
 
-Any change pushed to the repo will also be reflected in the Base44 Builder.
+## 📖 About the Project
 
-**Prerequisites:**
+TaskMaster is a modern **AI-powered productivity application** built with **React + Vite + Base44 (ZenithFlow)**.
 
-1. Clone the repository using the project's Git URL
-2. Navigate to the project directory
-3. Install dependencies: `npm install`
-4. Create an `.env.local` file and set the right environment variables
+It helps users manage tasks, set goals, and improve productivity with the help of an integrated AI assistant.
 
+The system combines:
+- Task management
+- Goal tracking
+- AI chatbot assistance
+- Automated task generation
+
+---
+
+## ✨ Features
+
+### 📋 Task Management
+- Create, update, and delete tasks
+- Prioritize tasks (Low, Medium, High)
+- Organize tasks by categories
+- Set due dates and track progress
+
+### 🎯 Goal System
+- Create long-term goals
+- AI-generated task breakdowns
+- Progress tracking per goal
+
+### 🤖 AI Chat Assistant
+- Plan your day with AI
+- Generate tasks automatically
+- Suggest productivity habits
+- Provide structured schedules
+
+### 📊 Dashboard
+- Weekly progress overview
+- Task completion stats
+- Visual progress indicators
+- Recent activity tracking
+
+### 🎨 UI/UX Design
+- Clean modern interface
+- Responsive mobile-first design
+- Indigo/Violet productivity theme
+- Smooth animations and transitions
+
+---
+
+## 🧠 AI Capabilities
+
+The built-in AI assistant can:
+- Plan daily schedules
+- Generate task lists from goals
+- Suggest productivity habits
+- Help organize workflows
+- Provide motivational structure
+
+---
+
+## 🛠️ Tech Stack
+
+- React.js
+- Vite
+- Tailwind CSS
+- Base44 / ZenithFlow AI Backend
+- JavaScript (ES6+)
+
+---
+
+## 📁 Project Structure
+
+
+TaskMaster/
+├── src/
+│ ├── components/
+│ ├── pages/
+│ ├── entities/
+│ ├── layout/
+│ └── styles/
+├── public/
+├── .env
+├── vite.config.js
+└── package.json
+
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/coolieobowley95/taskmaster.git
