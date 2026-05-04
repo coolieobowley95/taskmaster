@@ -1,16 +1,33 @@
 import { useState, useEffect, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
+import { appParams } from '@/lib/app-params';
 import ChatBubble from '../components/chat/ChatBubble';
 import ChatInput from '../components/chat/ChatInput';
 import SuggestionChips from '../components/chat/SuggestionChips';
 import { Sparkles, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [initialLoad, setInitialLoad] = useState(true);
   const scrollRef = useRef(null);
+
+  const buildPrompt = (userContent, priorMessages) => {
+    const context = (priorMessages || [])
+      .filter((m) => m?.role === 'user' || m?.role === 'assistant')
+      .slice(-10)
+      .map((m) => `${m.role.toUpperCase()}: ${m.content}`)
+      .join('\n');
+
+    return `You are FlowMind AI, a friendly productivity assistant for a task management app.
+Help the user plan their day, break down goals into actionable steps, suggest habits, and give concise, practical advice.
+
+Conversation so far:
+${context || '(no prior messages)'}
+
+USER: ${userContent}
+ASSISTANT:`;
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -55,30 +72,58 @@ export default function Chat() {
     
     setLoading(true);
 
-    // Mock AI response for local development
-    const mockResponse = `Thanks for your message: "${content}". This is a local development mode response. For full AI functionality, connect to a Base44 backend.`;
-    
-    const assistantMsg = { 
-      id: (Date.now() + 1).toString(),
-      role: 'assistant', 
-      content: mockResponse, 
-      session_id: 'main',
-      created_date: new Date().toISOString()
-    };
-    
-    setTimeout(() => {
-      setMessages((prev) => [...prev, assistantMsg]);
+    let assistantContent = null;
+    if (appParams.appId !== 'local') {
       try {
-        base44.entities.ChatMessage.create(assistantMsg);
+        const result = await base44.integrations.Core.InvokeLLM({
+          prompt: buildPrompt(content, [...messages, userMsg]),
+          response_json_schema: {
+            type: 'object',
+            properties: {
+              reply: { type: 'string' },
+            },
+            required: ['reply'],
+          },
+        });
+        assistantContent = result?.reply?.trim() || null;
       } catch (err) {
-        console.error('Failed to save assistant message:', err);
-        // Store locally
-        const localMessages = JSON.parse(localStorage.getItem('local_messages') || '[]');
-        localMessages.push(assistantMsg);
-        localStorage.setItem('local_messages', JSON.stringify(localMessages));
+        console.error('Chat LLM call failed:', err);
       }
+    }
+
+    if (!assistantContent) {
+      if (appParams.appId === 'local') {
+        assistantContent =
+          `Your app is running with appId="local", so the AI backend isn't configured.\n\n` +
+          `Set these env vars, then restart \`npm run dev\`:\n` +
+          `- VITE_BASE44_APP_ID=<your Base44 app id>\n` +
+          `- VITE_BASE44_APP_BASE_URL=https://coolieo-bowley-task-master.base44.app`;
+      } else {
+        assistantContent =
+          `I couldn't reach the AI backend right now. Double-check your Base44 env vars (especially \`VITE_BASE44_APP_ID\` and \`VITE_BASE44_APP_BASE_URL\`), then restart the dev server.`;
+      }
+    }
+
+    const assistantMsg = {
+      id: (Date.now() + 1).toString(),
+      role: 'assistant',
+      content: assistantContent,
+      session_id: 'main',
+      created_date: new Date().toISOString(),
+    };
+
+    setMessages((prev) => [...prev, assistantMsg]);
+    try {
+      await base44.entities.ChatMessage.create(assistantMsg);
+    } catch (err) {
+      console.error('Failed to save assistant message:', err);
+      // Store locally
+      const localMessages = JSON.parse(localStorage.getItem('local_messages') || '[]');
+      localMessages.push(assistantMsg);
+      localStorage.setItem('local_messages', JSON.stringify(localMessages));
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   if (initialLoad) {

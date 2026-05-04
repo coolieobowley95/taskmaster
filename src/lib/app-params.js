@@ -42,6 +42,7 @@ const getAppParams = () => {
 	return {
 		appId: getAppParamValue("app_id", { defaultValue: import.meta.env.VITE_BASE44_APP_ID || 'local' }),
 		token: getAppParamValue("access_token", { removeFromUrl: true }),
+		apiKey: getAppParamValue("api_key", { defaultValue: import.meta.env.VITE_BASE44_API_KEY, removeFromUrl: true }),
 		fromUrl: getAppParamValue("from_url", { defaultValue: window.location.href }),
 		functionsVersion: getAppParamValue("functions_version", { defaultValue: import.meta.env.VITE_BASE44_FUNCTIONS_VERSION }),
 		appBaseUrl: getAppParamValue("app_base_url", { defaultValue: import.meta.env.VITE_BASE44_APP_BASE_URL || 'http://localhost' }),
@@ -51,4 +52,15 @@ const getAppParams = () => {
 
 export const appParams = {
 	...getAppParams()
+}
+
+if (!isNode && import.meta.env.DEV) {
+	// Helpful for local debugging: confirms which env/url params are being used.
+	console.log('[base44] appParams', {
+		appId: appParams.appId,
+		appBaseUrl: appParams.appBaseUrl,
+		functionsVersion: appParams.functionsVersion,
+		hasToken: Boolean(appParams.token),
+		hasApiKey: Boolean(appParams.apiKey),
+	});
 }
