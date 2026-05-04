@@ -12,6 +12,9 @@ TaskMaster is a modern, AI-powered task management application built with React 
 **Domain Url**
 https://coolieo-bowley-task-master.base44.app
 
+**Loacal Domain Url**
+http://localhost:5173
+
 **Features**
 
 - Create and manage tasks with priorities, categories, and due dates
